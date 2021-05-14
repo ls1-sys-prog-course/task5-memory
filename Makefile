@@ -12,13 +12,15 @@ all:
 	@echo "Please set a concrete build command here"
 	false
 
+#all: libmymalloc.so
+
 # C example:
-#all:
-#	$(CC) $(CFLAGS) -o task-name task-name.c
+#libmymalloc.so: task5-memory.c
+#	$(CC) $(CFLAGS) -shared -fPIC -ldl -o $@ $<
 
 # C++ example:
-#all:
-#	$(CXX) $(CXXFLAGS) -o task-name task-name.cpp
+#task5-memory:
+#	$(CXX) $(CXXFLAGS) -o task5-memory task5-memory.cpp
 
 # Rust example:
 #all:
@@ -27,3 +29,6 @@ all:
 # Usually there is no need to modify this
 check: all
 	$(MAKE) -C tests check
+
+clean:
+	rm -rf *.so *.so.* *.o
