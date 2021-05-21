@@ -1,7 +1,12 @@
 PYTHON3 ?= python3
+CFLAGS += -O2
+CPPFLAGS += $(CFLAGS)
+CPPFLAGS += -w
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-PROGS=alloc_free_simple alloc_realloc_free_simple calloc_free_simple alloc_free_medium alloc_realloc_free_medium calloc_free_medium coalescing threadtest
+PROGS=alloc_free_simple alloc_realloc_free_simple calloc_free_simple\
+	  alloc_free_medium alloc_realloc_free_medium calloc_free_medium\
+	  coalescing threadtest larson
 
 check: $(addprefix ${ROOT_DIR}/,$(PROGS))
 	$(PYTHON3) ${ROOT_DIR}/basic_func.py
@@ -10,25 +15,28 @@ check: $(addprefix ${ROOT_DIR}/,$(PROGS))
 	$(PYTHON3) ${ROOT_DIR}/threadtest.py
 
 ${ROOT_DIR}/alloc_free_simple: ${ROOT_DIR}/alloc_free_simple.c
-	gcc -Og -g -o $@ $<
+	$(CC) $(CFLAGS) -Og -g -o $@ $<
 
 ${ROOT_DIR}/alloc_realloc_free_simple: ${ROOT_DIR}/alloc_realloc_free_simple.c
-	gcc -Og -g -o $@ $<
+	$(CC) $(CFLAGS) -Og -g -o $@ $<
 
 ${ROOT_DIR}/calloc_free_simple: ${ROOT_DIR}/calloc_free_simple.c
-	gcc -Og -g -o $@ $<
+	$(CC) $(CFLAGS) -Og -g -o $@ $<
 
 ${ROOT_DIR}/alloc_free_medium: ${ROOT_DIR}/alloc_free_medium.c
-	gcc -Og -g -o $@ $<
+	$(CC) $(CFLAGS) -Og -g -o $@ $<
 
 ${ROOT_DIR}/alloc_realloc_free_medium: ${ROOT_DIR}/alloc_realloc_free_medium.c
-	gcc -Og -g -o $@ $<
+	$(CC) $(CFLAGS) -Og -g -o $@ $<
 
 ${ROOT_DIR}/calloc_free_medium: ${ROOT_DIR}/calloc_free_medium.c
-	gcc -Og -g -o $@ $<
+	$(CC) $(CFLAGS) -Og -g -o $@ $<
 
 ${ROOT_DIR}/coalescing: ${ROOT_DIR}/coalescing.c
-	gcc -Og -g -o $@ $<
+	$(CC) $(CFLAGS) -Og -g -o $@ $<
 
 ${ROOT_DIR}/threadtest: ${ROOT_DIR}/threadtest.c
-	gcc -Og -g -o $@ $< -lpthread
+	$(CC) $(CFLAGS) -Og -g -o $@ $< -lpthread
+
+${ROOT_DIR}/larson: ${ROOT_DIR}/larson.cpp
+	${CXX} $(CPPFLAGS) -Og -g -o $@ $< -lpthread
