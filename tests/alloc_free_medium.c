@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/time.h>
-#include <sys/resource.h>
-#include <errno.h>
+#include "helper.h"
 
 #define ALLOC_OPS 10000
 #define ALLOC_SIZE 1000
@@ -17,8 +11,7 @@
 */
 
 int main() {
-	void* ptr[ALLOC_OPS];
-	int size;
+	char* ptr[ALLOC_OPS];
 
 	struct rlimit limit;
 	limit.rlim_cur = ALLOC_OPS * ALLOC_SIZE * MAX_THRES;
@@ -35,15 +28,21 @@ int main() {
 			fprintf(stderr, "Fatal: failed to allocate %u bytes.\n", ALLOC_SIZE);
 			exit(-1);
 		}
+		assert(IS_SIZE_ALIGNED(ptr[i]));
+		/* access the allocated memory */
 		memset(ptr[i], i, ALLOC_SIZE);
-		if (i % 2 == 0)
+		*(ptr[i]) = 's'; //start
+		*(ptr[i] + ALLOC_SIZE - 1) = 'e'; //end
+		if (i % 2 == 0) {
+			assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
 			free(ptr[i]);
+		}
 	}
 
 	for (int i = 1; i < ALLOC_OPS; i+=2) {
+		assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
 		free(ptr[i]);
 	}
 
 	return 0;
 }
-

@@ -1,11 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/time.h>
-#include <sys/resource.h>
-#include <errno.h>
-#include <time.h>
+#include "helper.h"
 
 #define MAX_ALLOC_SIZE 4096
 #define ALLOC_OPS 10000
@@ -15,6 +8,7 @@
 	Correct implementation of calloc is sufficient
 	Pass even without block reuse
 */
+
 int main() {
 	void* ptr[ALLOC_OPS];
 	int size;
@@ -29,6 +23,7 @@ int main() {
 			fprintf(stderr, "Fatal: failed to allocate %u bytes.\n", size);
 			exit(-1);
 		}
+		assert(IS_SIZE_ALIGNED(ptr[i]));
 		/* check if allocated memory is zeroed */
 		if (memcmp(ptr[i], testblock, size) != 0) {
 			fprintf(stderr, "Fatal: allocated memory range is not zeroed.\n");
@@ -41,4 +36,3 @@ int main() {
 	}
 	return 0;
 }
-

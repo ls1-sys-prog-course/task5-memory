@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/time.h>
-#include <sys/resource.h>
-#include <errno.h>
+#include "helper.h"
 
 #define ALLOC_OPS 10000
 #define ALLOC_SIZE 1000
@@ -36,7 +30,7 @@ int main() {
 			fprintf(stderr, "Fatal: failed to allocate %u bytes.\n", ALLOC_SIZE);
 			exit(-1);
 		}
-		
+		assert(IS_SIZE_ALIGNED(ptr[i]));
 		/* check if allocated memory is zeroed */
 		if (memcmp(ptr[i], testblock, ALLOC_SIZE) != 0) {
 			fprintf(stderr, "Fatal: allocated memory range is not zeroed.\n");
@@ -53,4 +47,3 @@ int main() {
 
 	return 0;
 }
-
