@@ -38,7 +38,7 @@
 #include <stdlib.h>
 
 int niterations = 200;	// Default number of iterations.
-int nobjects = 100000;  // Default number of objects.
+int nobjects = 10000;  // Default number of objects.
 int nthreads = 1;	// Default number of threads.
 int work = 0;		// Default number of loop iterations.
 int objSize = 8;
