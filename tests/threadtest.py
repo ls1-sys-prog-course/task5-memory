@@ -9,7 +9,7 @@ from testsupport import run, run_project_executable, subtest, test_root, warn, e
 def main() -> None:
     # Get test abspath
     min_scaling_factor = 1.2
-    testname = ["threadtest"]#, "larson"]
+    testname = ["threadtest", "larson"]
     lib = ensure_library("libmymalloc.so")
     with tempfile.TemporaryDirectory() as tmpdir:
 

@@ -8,7 +8,8 @@ from testsupport import run, run_project_executable, subtest, test_root, warn, e
 
 def main() -> None:
     # Get test abspath
-    testname = ["alloc_free_simple", "calloc_free_simple", "alloc_realloc_free_simple"]
+    testname = ["alloc_free_simple", "calloc_free_simple", "alloc_realloc_free_simple",
+                "overlap_check_1", "overlap_check_2", "overlap_check_3"]
     lib = ensure_library("libmymalloc.so")
     with tempfile.TemporaryDirectory() as tmpdir:
 

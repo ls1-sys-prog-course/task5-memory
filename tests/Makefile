@@ -5,6 +5,7 @@ CPPFLAGS += -w
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 PROGS=alloc_free_simple alloc_realloc_free_simple calloc_free_simple\
+	  overlap_check_1 overlap_check_2 overlap_check_3\
 	  alloc_free_medium alloc_realloc_free_medium calloc_free_medium\
 	  coalescing threadtest larson
 
@@ -21,6 +22,15 @@ ${ROOT_DIR}/alloc_realloc_free_simple: ${ROOT_DIR}/alloc_realloc_free_simple.c
 	$(CC) $(CFLAGS) -Og -g -o $@ $<
 
 ${ROOT_DIR}/calloc_free_simple: ${ROOT_DIR}/calloc_free_simple.c
+	$(CC) $(CFLAGS) -Og -g -o $@ $<
+
+${ROOT_DIR}/overlap_check_1: ${ROOT_DIR}/overlap_check_1.c
+	$(CC) $(CFLAGS) -Og -g -o $@ $<
+
+${ROOT_DIR}/overlap_check_2: ${ROOT_DIR}/overlap_check_2.c
+	$(CC) $(CFLAGS) -Og -g -o $@ $<
+
+${ROOT_DIR}/overlap_check_3: ${ROOT_DIR}/overlap_check_3.c
 	$(CC) $(CFLAGS) -Og -g -o $@ $<
 
 ${ROOT_DIR}/alloc_free_medium: ${ROOT_DIR}/alloc_free_medium.c
