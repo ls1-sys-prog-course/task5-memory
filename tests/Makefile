@@ -39,4 +39,4 @@ ${ROOT_DIR}/threadtest: ${ROOT_DIR}/threadtest.c
 	$(CC) $(CFLAGS) -Og -g -o $@ $< -lpthread
 
 ${ROOT_DIR}/larson: ${ROOT_DIR}/larson.cpp
-	${CXX} $(CPPFLAGS) -Og -g -o $@ $< -lpthread
+	$(CXX) $(CPPFLAGS) -Og -g -o $@ $< -lpthread

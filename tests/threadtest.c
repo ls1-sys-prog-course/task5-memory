@@ -17,118 +17,115 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-
 /**
  * @file threadtest.c
  *
  * This program does nothing but generate a number of kernel threads
  * that allocate and free memory, with a variable
  * amount of "work" (i.e. cycle wasting) in between.
-*/
+ */
 
 #ifndef _REENTRANT
 #define _REENTRANT
 #endif
 
-#include <stdio.h>
-#include <pthread.h>
-#include <sys/time.h>
 #include <assert.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
-int niterations = 200;	// Default number of iterations.
+int niterations = 200; // Default number of iterations.
 int nobjects = 10000;  // Default number of objects.
-int nthreads = 1;	// Default number of threads.
-int work = 0;		// Default number of loop iterations.
+int nthreads = 1;      // Default number of threads.
+int work = 0;          // Default number of loop iterations.
 int objSize = 8;
 
-void *worker ()
-{
-    int i, j;
-    void* a[nobjects / nthreads];
+void *worker() {
+  int i, j;
+  void *a[nobjects / nthreads];
 
-    for (j = 0; j < niterations; j++) {
+  for (j = 0; j < niterations; j++) {
 
-        for (i = 0; i < (nobjects / nthreads); i ++) {
-            a[i] = malloc(objSize); //Foo[objSize];
+    for (i = 0; i < (nobjects / nthreads); i++) {
+      a[i] = malloc(objSize); // Foo[objSize];
 #if 1
-            for (volatile int d = 0; d < work; d++) {
-                volatile int f = 1;
-                f = f + f;
-                f = f * f;
-                f = f + f;
-                f = f * f;
-            }
+      for (volatile int d = 0; d < work; d++) {
+        volatile int f = 1;
+        f = f + f;
+        f = f * f;
+        f = f + f;
+        f = f * f;
+      }
 #endif
-            assert (a[i]);
-            *(int*)a[i] = i;
-        }
-        
-        for (i = 0; i < (nobjects / nthreads); i ++) {
-            assert(*(int*)a[i] == i);
-            free(a[i]);
-        
-#if 1
-            for (volatile int d = 0; d < work; d++) {
-                volatile int f = 1;
-                f = f + f;
-                f = f * f;
-                f = f + f;
-                f = f * f;
-            }
-#endif
-        }
+      assert(a[i]);
+      *(int *)a[i] = i;
     }
-    return NULL;
+
+    for (i = 0; i < (nobjects / nthreads); i++) {
+      assert(*(int *)a[i] == i);
+      free(a[i]);
+
+#if 1
+      for (volatile int d = 0; d < work; d++) {
+        volatile int f = 1;
+        f = f + f;
+        f = f * f;
+        f = f + f;
+        f = f * f;
+      }
+#endif
+    }
+  }
+  return NULL;
 }
 
-int main (int argc, char * argv[])
-{
-    pthread_t *threads;
-    
-    if (argc >= 2) {
-        nthreads = atoi(argv[1]);
-    }
+int main(int argc, char *argv[]) {
+  pthread_t *threads;
 
-    if (argc >= 3) {
-        niterations = atoi(argv[2]);
-    }
+  if (argc >= 2) {
+    nthreads = atoi(argv[1]);
+  }
 
-    if (argc >= 4) {
-        nobjects = atoi(argv[3]);
-    }
+  if (argc >= 3) {
+    niterations = atoi(argv[2]);
+  }
 
-    if (argc >= 5) {
-        work = atoi(argv[4]);
-    }
+  if (argc >= 4) {
+    nobjects = atoi(argv[3]);
+  }
 
-    if (argc >= 6) {
-        objSize = atoi(argv[5]);
-    }
+  if (argc >= 5) {
+    work = atoi(argv[4]);
+  }
 
-    //printf ("Running threadtest for %d threads, %d iterations, %d objects, %d work and %d objSize...\n", nthreads, niterations, nobjects, work, objSize);
+  if (argc >= 6) {
+    objSize = atoi(argv[5]);
+  }
 
-    threads = (pthread_t*)malloc(nthreads * sizeof(pthread_t));
+  // printf ("Running threadtest for %d threads, %d iterations, %d objects, %d
+  // work and %d objSize...\n", nthreads, niterations, nobjects, work, objSize);
 
-    struct timespec start, end;
-    clock_gettime(CLOCK_MONOTONIC, &start);
+  threads = (pthread_t *)malloc(nthreads * sizeof(pthread_t));
 
-    int i;
-    for (i = 0; i < nthreads; i++) {
-        pthread_create(&threads[i], NULL, &worker, NULL);
-    }
+  struct timespec start, end;
+  clock_gettime(CLOCK_MONOTONIC, &start);
 
-    for (i = 0; i < nthreads; i++) {
-        pthread_join(threads[i], NULL);
-    }
-    clock_gettime(CLOCK_MONOTONIC, &end);
-    double time_taken;
-    time_taken = (end.tv_sec - start.tv_sec) * 1e9;
-    time_taken = (time_taken + (end.tv_nsec - start.tv_nsec)) * 1e-9;
-    printf("%f\n", time_taken);
+  int i;
+  for (i = 0; i < nthreads; i++) {
+    pthread_create(&threads[i], NULL, &worker, NULL);
+  }
 
-    free(threads);
+  for (i = 0; i < nthreads; i++) {
+    pthread_join(threads[i], NULL);
+  }
+  clock_gettime(CLOCK_MONOTONIC, &end);
+  double time_taken;
+  time_taken = (end.tv_sec - start.tv_sec) * 1e9;
+  time_taken = (time_taken + (end.tv_nsec - start.tv_nsec)) * 1e-9;
+  printf("%f\n", time_taken);
 
-    return 0;
+  free(threads);
+
+  return 0;
 }
