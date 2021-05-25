@@ -1,0 +1,10 @@
+[package]
+name = "mymalloc"
+version = "0.0.1"
+edition = "2018"
+
+[lib]
+crate_type = ["cdylib"]
+
+[dependencies]
+libc = "0.2.94"
