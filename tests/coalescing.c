@@ -18,16 +18,19 @@ int main() {
 
   if (setrlimit(RLIMIT_DATA, &limit) != 0) {
     fprintf(stderr, "setrlimit() failed with errno=%d\n", errno);
-    exit(-1);
+    exit(1);
   }
 
   for (int i = 0; i < ALLOC_OPS; i++) {
     ptr[i] = malloc(ALLOC_SIZE);
     if (ptr[i] == NULL) {
       fprintf(stderr, "Fatal: failed to allocate %u bytes.\n", ALLOC_SIZE);
-      exit(-1);
+      exit(1);
     }
-    assert(IS_SIZE_ALIGNED(ptr[i]));
+    if (!IS_SIZE_ALIGNED(ptr[i])) {
+      fprintf(stderr, "Returned memory address is not aligned\n");
+      exit(1);
+    }
     /* access the allocated memory */
     memset(ptr[i], i, ALLOC_SIZE);
     *(ptr[i]) = 's';                  // start
@@ -35,22 +38,34 @@ int main() {
   }
 
   for (int i = 1; i < ALLOC_OPS; i += 2) {
-    assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
+    if (!((*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e'))) {
+      fprintf(stderr, "Memory content different than the expected\n");
+      exit(1);
+    }
     free(ptr[i]);
   }
 
   for (int i = 0; i < ALLOC_OPS; i += 2) {
     // printf("%c %c %d\n",*ptr[i],*(ptr[i] + ALLOC_SIZE - 1), i);
-    assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
+    if (!((*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e'))) {
+      fprintf(stderr, "Memory content different than the expected\n");
+      exit(1);
+    }
     ptr[i] = realloc(ptr[i], REALLOC_SIZE);
     if (ptr[i] == NULL) {
       fprintf(stderr, "Fatal: failed to reallocate to %u bytes.\n",
               REALLOC_SIZE);
-      exit(-1);
+      exit(1);
     }
-    assert(IS_SIZE_ALIGNED(ptr[i]));
+    if (!IS_SIZE_ALIGNED(ptr[i])) {
+      fprintf(stderr, "Returned memory address is not aligned\n");
+      exit(1);
+    }
     /* check if the content is copied */
-    assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
+    if (!((*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e'))) {
+      fprintf(stderr, "Memory content not copied correctly\n");
+      exit(1);
+    }
     /* access the reallocated memory */
     memset(ptr[i], i + 1, REALLOC_SIZE);
     *(ptr[i]) = 's';                    // start
@@ -58,7 +73,10 @@ int main() {
   }
 
   for (int i = 0; i < ALLOC_OPS; i += 2) {
-    assert(*ptr[i] == 's' && *(ptr[i] + REALLOC_SIZE - 1) == 'e');
+    if (!((*ptr[i] == 's' && *(ptr[i] + REALLOC_SIZE - 1) == 'e'))) {
+      fprintf(stderr, "Memory content different than the expected\n");
+      exit(1);
+    }
     free(ptr[i]);
   }
   return 0;

@@ -308,7 +308,11 @@ void runloops(long sleep_cnt, int num_chunks) {
     blkp[cblks] = (char *)malloc(blk_size);
 #endif
     blksize[cblks] = blk_size;
-    assert(blkp[cblks] != NULL);
+    // assert(blkp[cblks] != NULL);
+    if (!(blkp[cblks] != NULL)) {
+      fprintf(stderr, "Fatal: failed to allocate %d bytes.\n", blk_size);
+      exit(1);
+    }
   }
 
   while (TRUE) {
@@ -331,7 +335,11 @@ void runloops(long sleep_cnt, int num_chunks) {
       blkp[victim] = (char *)malloc(blk_size);
 #endif
       blksize[victim] = blk_size;
-      assert(blkp[victim] != NULL);
+      // assert(blkp[victim] != NULL);
+      if (!(blkp[victim] != NULL)) {
+        fprintf(stderr, "Fatal: failed to allocate %d bytes.\n", blk_size);
+        exit(1);
+      }
     }
     sum_allocs += num_chunks;
 
@@ -526,7 +534,11 @@ static void *exercise_heap(void *pinput) {
 #endif
 
     pdea->blksize[victim] = blk_size;
-    assert(pdea->array[victim] != NULL);
+    // assert(pdea->array[victim] != NULL);
+    if (!(pdea->array[victim] != NULL)) {
+      fprintf(stderr, "Fatal: failed to allocate %d bytes.\n", blk_size);
+      exit(1);
+    }
 
     pdea->cAllocs++;
 
@@ -575,7 +587,11 @@ static void warmup(char **blkp, int num_chunks) {
     blkp[cblks] = (char *)malloc(blk_size);
 #endif
     blksize[cblks] = blk_size;
-    assert(blkp[cblks] != NULL);
+    // assert(blkp[cblks] != NULL);
+    if (!(blkp[cblks] != NULL)) {
+      fprintf(stderr, "Fatal: failed to allocate %d bytes.\n", blk_size);
+      exit(1);
+    }
   }
 
   /* generate a random permutation of the chunks */
@@ -605,7 +621,11 @@ static void warmup(char **blkp, int num_chunks) {
     blkp[victim] = (char *)malloc(blk_size);
 #endif
     blksize[victim] = blk_size;
-    assert(blkp[victim] != NULL);
+    // assert(blkp[victim] != NULL);
+    if (!(blkp[victim] != NULL)) {
+      fprintf(stderr, "Fatal: failed to allocate %d bytes.\n", blk_size);
+      exit(1);
+    }
   }
 }
 #endif // _MT

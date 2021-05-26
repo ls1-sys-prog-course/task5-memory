@@ -9,7 +9,7 @@ void *safe_malloc(size_t size) {
   void *ptr = malloc(size);
   if (ptr == NULL) {
     fprintf(stderr, "Fatal: failed to allocate %lu bytes.\n", size);
-    exit(-1);
+    exit(1);
   }
   return ptr;
 }
@@ -18,7 +18,7 @@ void *safe_realloc(void *old_ptr, size_t size) {
   void *new_ptr = realloc(old_ptr, size);
   if (new_ptr == NULL) {
     fprintf(stderr, "Fatal: failed to reallocate to %lu bytes.\n", size);
-    exit(-1);
+    exit(1);
   }
   return new_ptr;
 }
@@ -27,7 +27,7 @@ void verify(void *region, int c, size_t len) {
   char *r = region;
   while (len--)
     if (*(r++) != (char)c) {
-      printf("Memeory failed to contain correct value!\n");
+      fprintf(stderr, "Memeory failed to contain correct value!\n");
       exit(1);
     }
 }
@@ -38,14 +38,14 @@ int overlap(void *r1, void *r2, size_t len) {
 
 void verify_overlap2(void *r1, void *r2, size_t len) {
   if (overlap(r1, r2, len)) {
-    printf("Memory regions overlap!\n");
+    fprintf(stderr, "Memory regions overlap!\n");
     exit(1);
   }
 }
 
 void verify_overlap3(void *r1, void *r2, void *r3, size_t len) {
   if (overlap(r1, r2, len) || overlap(r1, r3, len) || overlap(r2, r3, len)) {
-    printf("Memory regions overlap!\n");
+    fprintf(stderr, "Memory regions overlap!\n");
     exit(1);
   }
 }

@@ -22,7 +22,7 @@ int main() {
 
   if (setrlimit(RLIMIT_DATA, &limit) != 0) {
     fprintf(stderr, "setrlimit() failed with errno=%d\n", errno);
-    exit(-1);
+    exit(1);
   }
 
   time_t t;
@@ -32,9 +32,12 @@ int main() {
     ptr[i] = malloc(ALLOC_SIZE);
     if (ptr[i] == NULL) {
       fprintf(stderr, "Fatal: failed to allocate %u bytes.\n", ALLOC_SIZE);
-      exit(-1);
+      exit(1);
     }
-    assert(IS_SIZE_ALIGNED(ptr[i]));
+    if (!IS_SIZE_ALIGNED(ptr[i])) {
+      fprintf(stderr, "Returned memory address is not aligned\n");
+      exit(1);
+    }
     /* access the allocated memory */
     memset(ptr[i], i, ALLOC_SIZE);
     *(ptr[i]) = 's';                  // start
@@ -44,7 +47,10 @@ int main() {
   /* free 4 consecutive ptrs */
   for (int i = 0; i < ALLOC_OPS; i++) {
     if (i % 5 > 0) {
-      assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
+      if (!((*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e'))) {
+        fprintf(stderr, "Memory content different than the expected\n");
+        exit(1);
+      }
       free(ptr[i]);
     }
   }
@@ -54,9 +60,12 @@ int main() {
     new_ptr[i] = malloc(new_size[i]);
     if (new_ptr[i] == NULL) {
       fprintf(stderr, "Fatal: failed to allocate %lu bytes.\n", new_size[i]);
-      exit(-1);
+      exit(1);
     }
-    assert(IS_SIZE_ALIGNED(new_ptr[i]));
+    if (!IS_SIZE_ALIGNED(new_ptr[i])) {
+      fprintf(stderr, "Returned memory address is not aligned\n");
+      exit(1);
+    }
     /* access the allocated memory */
     memset(new_ptr[i], i, new_size[i]);
     *(new_ptr[i]) = 's';                   // start
@@ -65,13 +74,19 @@ int main() {
 
   for (int i = 0; i < ALLOC_OPS; i++) {
     if (i % 5 == 0) {
-      assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
+      if (!((*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e'))) {
+        fprintf(stderr, "Memory content different than the expected\n");
+        exit(1);
+      }
       free(ptr[i]);
     }
   }
 
   for (int i = 0; i < NEW_ALLOC_OPS; i += 2) {
-    assert(*new_ptr[i] == 's' && *(new_ptr[i] + new_size[i] - 1) == 'e');
+    if (!((*new_ptr[i] == 's' && *(new_ptr[i] + new_size[i] - 1) == 'e'))) {
+      fprintf(stderr, "Memory content different than the expected\n");
+      exit(1);
+    }
     free(new_ptr[i]);
   }
   return 0;

@@ -58,12 +58,18 @@ void *worker() {
         f = f * f;
       }
 #endif
-      assert(a[i]);
+      if (!a[i]) {
+        fprintf(stderr, "Fatal: failed to allocate %u bytes.\n", objSize);
+        exit(1);
+      }
       *(int *)a[i] = i;
     }
 
     for (i = 0; i < (nobjects / nthreads); i++) {
-      assert(*(int *)a[i] == i);
+      if (!(*(int *)a[i] == i)) {
+        fprintf(stderr, "Memory failed to contain correct value!\n");
+        exit(1);
+      }
       free(a[i]);
 
 #if 1

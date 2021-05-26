@@ -21,20 +21,23 @@ int main() {
 
   if (setrlimit(RLIMIT_DATA, &limit) != 0) {
     fprintf(stderr, "setrlimit() failed with errno=%d\n", errno);
-    exit(-1);
+    exit(1);
   }
 
   for (int i = 0; i < ALLOC_OPS; i++) {
     ptr[i] = calloc(ALLOC_SIZE, sizeof(char));
     if (ptr[i] == NULL) {
       fprintf(stderr, "Fatal: failed to allocate %u bytes.\n", ALLOC_SIZE);
-      exit(-1);
+      exit(1);
     }
-    assert(IS_SIZE_ALIGNED(ptr[i]));
+    if (!IS_SIZE_ALIGNED(ptr[i])) {
+      fprintf(stderr, "Returned memory address is not aligned\n");
+      exit(1);
+    }
     /* check if allocated memory is zeroed */
     if (memcmp(ptr[i], testblock, ALLOC_SIZE) != 0) {
       fprintf(stderr, "Fatal: allocated memory range is not zeroed.\n");
-      exit(-1);
+      exit(1);
     }
 
     if (i % 2 == 0)

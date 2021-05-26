@@ -21,9 +21,12 @@ int main() {
     ptr[i] = malloc(size[i]);
     if (ptr[i] == NULL) {
       fprintf(stderr, "Fatal: failed to allocate %u bytes.\n", size[i]);
-      exit(-1);
+      exit(1);
     }
-    assert(IS_SIZE_ALIGNED(ptr[i]));
+    if (!IS_SIZE_ALIGNED(ptr[i])) {
+      fprintf(stderr, "Returned memory address is not aligned\n");
+      exit(1);
+    }
     /* access the allocated memory */
     memset(ptr[i], i, size[i]);
     *(ptr[i]) = 's';               // start
@@ -31,7 +34,10 @@ int main() {
   }
 
   for (int i = 0; i < ALLOC_OPS; i++) {
-    assert(*ptr[i] == 's' && *(ptr[i] + size[i] - 1) == 'e');
+    if (!((*ptr[i] == 's' && *(ptr[i] + size[i] - 1) == 'e'))) {
+      fprintf(stderr, "Memory content different than the expected\n");
+      exit(1);
+    }
     free(ptr[i]);
   }
   return 0;

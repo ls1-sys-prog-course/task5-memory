@@ -23,9 +23,12 @@ int main() {
     ptr[i] = malloc(size[i]);
     if (ptr[i] == NULL) {
       fprintf(stderr, "Fatal: failed to allocate %u bytes.\n", size[i]);
-      exit(-1);
+      exit(1);
     }
-    assert(IS_SIZE_ALIGNED(ptr[i]));
+    if (!IS_SIZE_ALIGNED(ptr[i])) {
+      fprintf(stderr, "Returned memory address is not aligned\n");
+      exit(1);
+    }
     /* access the allocated memory */
     memset(ptr[i], i, size[i]);
     *(ptr[i]) = 's';               // start
@@ -39,14 +42,24 @@ int main() {
     ptr[i] = realloc(ptr[i], size[i]);
     if (ptr[i] == NULL) {
       fprintf(stderr, "Fatal: failed to reallocate to %u bytes.\n", size[i]);
-      exit(-1);
+      exit(1);
     }
-    assert(IS_SIZE_ALIGNED(ptr[i]));
+    if (!IS_SIZE_ALIGNED(ptr[i])) {
+      fprintf(stderr, "Returned memory address is not aligned\n");
+      exit(1);
+    }
     /* check if the content is copied */
-    if (old_size < size[i]) // enlarge
-      assert(*ptr[i] == 's' && *(ptr[i] + old_size - 1) == 'e');
-    else // shrink
-      assert(*ptr[i] == 's');
+    if (old_size < size[i]) { // enlarge
+      if (!((*ptr[i] == 's' && *(ptr[i] + old_size - 1) == 'e'))) {
+        fprintf(stderr, "Memory content different than the expected\n");
+        exit(1);
+      }
+    } else { // shrink
+      if (!(*ptr[i] == 's')) {
+        fprintf(stderr, "Memory content different than the expected\n");
+        exit(1);
+      }
+    }
 
     /* access the reallocated memory */
     memset(ptr[i], i + 1, size[i]);
@@ -55,7 +68,10 @@ int main() {
   }
 
   for (int i = 0; i < ALLOC_OPS; i++) {
-    assert(*ptr[i] == 's' && *(ptr[i] + size[i] - 1) == 'e');
+    if (!((*ptr[i] == 's' && *(ptr[i] + size[i] - 1) == 'e'))) {
+      fprintf(stderr, "Memory content different than the expected\n");
+      exit(1);
+    }
     free(ptr[i]);
   }
   return 0;

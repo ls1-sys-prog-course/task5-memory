@@ -21,13 +21,16 @@ int main() {
     ptr[i] = calloc(size, sizeof(char));
     if (ptr[i] == NULL) {
       fprintf(stderr, "Fatal: failed to allocate %u bytes.\n", size);
-      exit(-1);
+      exit(1);
     }
-    assert(IS_SIZE_ALIGNED(ptr[i]));
+    if (!IS_SIZE_ALIGNED(ptr[i])) {
+      fprintf(stderr, "Returned memory address is not aligned\n");
+      exit(1);
+    }
     /* check if allocated memory is zeroed */
     if (memcmp(ptr[i], testblock, size) != 0) {
       fprintf(stderr, "Fatal: allocated memory range is not zeroed.\n");
-      exit(-1);
+      exit(1);
     }
   }
 
