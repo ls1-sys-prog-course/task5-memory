@@ -15,7 +15,7 @@ def main() -> None:
         for test in testname:
             test_file = test_root().joinpath(test)
             if not test_file.exists():
-                run(["make", "-C", str(test_root()), str(test)])
+                run(["make", "-C", str(test_root()), str(test_root())+"/"+str(test)])
         
         # Check that libmymalloc.so provides malloc,free,calloc,realloc symbols
         with subtest("Check that malloc,realloc,free,calloc functions are available in libmymalloc.so"):
