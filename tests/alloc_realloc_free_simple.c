@@ -32,8 +32,9 @@ int main() {
     *(ptr[i] + size[i] - 1) = 'e'; // end
   }
 
+  size_t old_size;
   for (int i = 0; i < ALLOC_OPS; i++) {
-    assert(*ptr[i] == 's' && *(ptr[i] + size[i] - 1) == 'e');
+    old_size = size[i];
     size[i] = rand() % MAX_ALLOC_SIZE + MIN_ALLOC_SIZE;
     ptr[i] = realloc(ptr[i], size[i]);
     if (ptr[i] == NULL) {
@@ -41,6 +42,8 @@ int main() {
       exit(-1);
     }
     assert(IS_SIZE_ALIGNED(ptr[i]));
+    /* check if the content is copied */
+    assert(*ptr[i] == 's' && *(ptr[i] + old_size - 1) == 'e');
     /* access the reallocated memory */
     memset(ptr[i], i + 1, size[i]);
     *(ptr[i]) = 's';               // start

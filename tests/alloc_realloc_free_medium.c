@@ -67,13 +67,15 @@ int main() {
       reallocate small ones to use the created big blocks
   */
   for (int i = 1; i < ALLOC_OPS; i += 2) {
-    assert(*ptr[i] == 's' && *(ptr[i] + size[i] - 1) == 'e');
     ptr[i] = realloc(ptr[i], ALLOC_SIZE_BIG);
     if (ptr[i] == NULL) {
       fprintf(stderr, "Fatal: failed to reallocate to %u bytes.\n", size[i]);
       exit(-1);
     }
     assert(IS_SIZE_ALIGNED(ptr[i]));
+    /* check if the content is copied */
+    assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE_SMALL - 1) == 'e');
+    
     size[i] = ALLOC_SIZE_BIG;
     memset(ptr[i], i + 1, size[i]);
     *(ptr[i]) = 's';               // start
