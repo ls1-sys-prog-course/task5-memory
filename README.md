@@ -57,6 +57,7 @@ in the respective paper: https://people.cs.umass.edu/~emery/pubs/berger-asplos20
    ```console
    $ make check
    ```
+4. [gdb - Debugging tip](http://truthbk.github.io/gdb-ld_preload-and-libc/)
 
 ## References:
 1. [Valgrind](https://valgrind.org/)
