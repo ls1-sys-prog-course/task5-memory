@@ -34,13 +34,13 @@ int main() {
     *(ptr[i] + ALLOC_SIZE - 1) = 'e'; // end
   }
 
-  for (int i = 1 ; i < ALLOC_OPS; i += 2) {
-      assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
-      free(ptr[i]);
+  for (int i = 1; i < ALLOC_OPS; i += 2) {
+    assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
+    free(ptr[i]);
   }
 
   for (int i = 0; i < ALLOC_OPS; i += 2) {
-    //printf("%c %c %d\n",*ptr[i],*(ptr[i] + ALLOC_SIZE - 1), i);
+    // printf("%c %c %d\n",*ptr[i],*(ptr[i] + ALLOC_SIZE - 1), i);
     assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
     ptr[i] = realloc(ptr[i], REALLOC_SIZE);
     if (ptr[i] == NULL) {
@@ -48,10 +48,10 @@ int main() {
               REALLOC_SIZE);
       exit(-1);
     }
-    assert(IS_SIZE_ALIGNED(ptr[i]));    
+    assert(IS_SIZE_ALIGNED(ptr[i]));
     /* check if the content is copied */
     assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
-    /* access the reallocated memory */    
+    /* access the reallocated memory */
     memset(ptr[i], i + 1, REALLOC_SIZE);
     *(ptr[i]) = 's';                    // start
     *(ptr[i] + REALLOC_SIZE - 1) = 'e'; // end

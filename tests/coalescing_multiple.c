@@ -37,37 +37,37 @@ int main() {
     assert(IS_SIZE_ALIGNED(ptr[i]));
     /* access the allocated memory */
     memset(ptr[i], i, ALLOC_SIZE);
-    *(ptr[i]) = 's';               // start
+    *(ptr[i]) = 's';                  // start
     *(ptr[i] + ALLOC_SIZE - 1) = 'e'; // end
   }
 
   /* free 4 consecutive ptrs */
   for (int i = 0; i < ALLOC_OPS; i++) {
-      if (i % 5 > 0 ) {
-        assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
-        free(ptr[i]);
-      }
+    if (i % 5 > 0) {
+      assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
+      free(ptr[i]);
+    }
   }
 
-  for (int i = 0 ; i < NEW_ALLOC_OPS; i++) {
-        new_size[i] = rand() % MAX_ADDED_SIZE + ALLOC_SIZE;
-        new_ptr[i] = malloc(new_size[i]);
-        if (new_ptr[i] == NULL) {
-            fprintf(stderr, "Fatal: failed to allocate %lu bytes.\n", new_size[i]);
-            exit(-1);
-        }
-        assert(IS_SIZE_ALIGNED(new_ptr[i]));
-        /* access the allocated memory */
-        memset(new_ptr[i], i, new_size[i]);
-        *(new_ptr[i]) = 's';                    // start
-        *(new_ptr[i] + new_size[i] - 1) = 'e'; // end
+  for (int i = 0; i < NEW_ALLOC_OPS; i++) {
+    new_size[i] = rand() % MAX_ADDED_SIZE + ALLOC_SIZE;
+    new_ptr[i] = malloc(new_size[i]);
+    if (new_ptr[i] == NULL) {
+      fprintf(stderr, "Fatal: failed to allocate %lu bytes.\n", new_size[i]);
+      exit(-1);
+    }
+    assert(IS_SIZE_ALIGNED(new_ptr[i]));
+    /* access the allocated memory */
+    memset(new_ptr[i], i, new_size[i]);
+    *(new_ptr[i]) = 's';                   // start
+    *(new_ptr[i] + new_size[i] - 1) = 'e'; // end
   }
 
   for (int i = 0; i < ALLOC_OPS; i++) {
-      if (i % 5 == 0 ) {
-        assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
-        free(ptr[i]);
-      }
+    if (i % 5 == 0) {
+      assert(*ptr[i] == 's' && *(ptr[i] + ALLOC_SIZE - 1) == 'e');
+      free(ptr[i]);
+    }
   }
 
   for (int i = 0; i < NEW_ALLOC_OPS; i += 2) {
