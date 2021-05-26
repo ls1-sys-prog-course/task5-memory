@@ -8,7 +8,7 @@ from testsupport import run, run_project_executable, subtest, test_root, warn, e
 
 def main() -> None:
     # Get test abspath
-    testname = ["coalescing"]
+    testname = ["coalescing", "coalescing_multiple"]
     lib = ensure_library("libmymalloc.so")
     with tempfile.TemporaryDirectory() as tmpdir:
 

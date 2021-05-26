@@ -7,7 +7,8 @@ ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 PROGS=alloc_free_simple alloc_realloc_free_simple calloc_free_simple\
 	  overlap_check_1 overlap_check_2 overlap_check_3\
 	  alloc_free_medium alloc_realloc_free_medium calloc_free_medium\
-	  coalescing threadtest larson
+	  coalescing coalescing_multiple\
+	  threadtest larson
 
 check: $(addprefix ${ROOT_DIR}/,$(PROGS))
 	$(PYTHON3) ${ROOT_DIR}/basic_func.py
@@ -43,6 +44,9 @@ ${ROOT_DIR}/calloc_free_medium: ${ROOT_DIR}/calloc_free_medium.c
 	$(CC) $(CFLAGS) -Og -g -o $@ $<
 
 ${ROOT_DIR}/coalescing: ${ROOT_DIR}/coalescing.c
+	$(CC) $(CFLAGS) -Og -g -o $@ $<
+
+${ROOT_DIR}/coalescing_multiple: ${ROOT_DIR}/coalescing_multiple.c
 	$(CC) $(CFLAGS) -Og -g -o $@ $<
 
 ${ROOT_DIR}/threadtest: ${ROOT_DIR}/threadtest.c
