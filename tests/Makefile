@@ -54,3 +54,6 @@ ${ROOT_DIR}/threadtest: ${ROOT_DIR}/threadtest.c
 
 ${ROOT_DIR}/larson: ${ROOT_DIR}/larson.cpp
 	$(CXX) $(CPPFLAGS) -Og -g -o $@ $< -lpthread
+
+clean:
+	rm -rf $(PROGS)
