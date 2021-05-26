@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) {
     /* default values */
     sleep_cnt = 5;
     min_size = 7;
-    max_size = 128;
+    max_size = 512;
     chperthread = 1000;
     num_rounds = 1000;
     seed = 10;
