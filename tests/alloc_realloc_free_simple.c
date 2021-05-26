@@ -43,7 +43,11 @@ int main() {
     }
     assert(IS_SIZE_ALIGNED(ptr[i]));
     /* check if the content is copied */
-    assert(*ptr[i] == 's' && *(ptr[i] + old_size - 1) == 'e');
+    if (old_size < size[i]) // enlarge
+      assert(*ptr[i] == 's' && *(ptr[i] + old_size - 1) == 'e');
+    else // shrink
+      assert(*ptr[i] == 's');
+
     /* access the reallocated memory */
     memset(ptr[i], i + 1, size[i]);
     *(ptr[i]) = 's';               // start
