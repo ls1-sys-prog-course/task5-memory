@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MIN_ALLOC_SIZE (256 * 1024)
+#define MIN_ALLOC_SIZE (1024)
 #define MAX_ALLOC_SIZE (1024 * 1024)
 
 void *safe_malloc(size_t size) {
@@ -33,7 +33,8 @@ void verify(void *region, int c, size_t len) {
 }
 
 int overlap(void *r1, void *r2, size_t len) {
-  return (size_t)r1 <= (size_t)r2 && (size_t)r2 < (size_t)(r1 + len);
+  return ((size_t)r1 <= (size_t)r2 && (size_t)r2 < (size_t)(r1 + len)) ||
+         ((size_t)r1 >= (size_t)r2 && (size_t)r1 < (size_t)(r2 + len));
 }
 
 void verify_overlap2(void *r1, void *r2, size_t len) {
