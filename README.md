@@ -58,6 +58,7 @@ in the respective paper: https://people.cs.umass.edu/~emery/pubs/berger-asplos20
    $ make check
    ```
 4. [gdb - Debugging tip](http://truthbk.github.io/gdb-ld_preload-and-libc/)
+5. For Rust, since std::sync::RwLock requires memory allocation to be functional, you are allowed to use parking_lot (https://github.com/Amanieu/parking_lot)
 
 ## References:
 1. [Valgrind](https://valgrind.org/)
