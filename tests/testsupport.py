@@ -10,7 +10,18 @@ import subprocess
 from pathlib import Path
 from shlex import quote
 from tempfile import NamedTemporaryFile
-from typing import IO, Any, Callable, Dict, List, Optional, Text, Union, Iterator
+from typing import (
+    IO,
+    Any,
+    Callable,
+    Dict,
+    List,
+    Optional,
+    Text,
+    Union,
+    Iterator,
+    NoReturn,
+)
 from inspect import getframeinfo, stack
 from contextlib import contextmanager
 from urllib.request import urlopen  # Python 3
@@ -34,23 +45,30 @@ def project_root() -> Path:
     return PROJECT_ROOT
 
 
+def fail(msg: str) -> NoReturn:
+    """
+    Fail test with given error message
+    """
+    warn(msg)
+    sys.exit(1)
+    raise Exception("BUG! should not happen")
+
+
 def assert_executable(executable: str, msg: str, path: Optional[str] = None) -> None:
     """
     exits if program does not exists
     """
     if not find_executable(executable, path):
-        warn(msg)
-        sys.exit(1)
+        fail(msg)
 
 
 def ensure_library(name: str, msg: Optional[str] = None) -> Path:
     p = find_library(name)
     if not p:
         if msg is None:
-            warn(f"Cannot find library {name}")
+            fail(f"Cannot find library {name}")
         else:
-            warn(msg)
-        sys.exit(1)
+            fail(msg)
     return p
 
 
@@ -236,8 +254,7 @@ def subtest(msg: str) -> Iterator[None]:
     try:
         yield
     except Exception as e:
-        warn(f"`{msg}` at {caller.filename}:{caller.lineno} failed with: {e}")
-        sys.exit(1)
+        fail(f"`{msg}` at {caller.filename}:{caller.lineno} failed with: {e}")
 
 
 def download(url: str, dest: Path) -> None:
