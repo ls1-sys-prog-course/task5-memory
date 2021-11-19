@@ -63,3 +63,18 @@ MANIFEST
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# Test binaries
+tests/alloc_free_medium
+tests/alloc_free_simple
+tests/alloc_realloc_free_medium
+tests/alloc_realloc_free_simple
+tests/calloc_free_medium
+tests/calloc_free_simple
+tests/coalescing
+tests/coalescing_multiple
+tests/larson
+tests/overlap_check_1
+tests/overlap_check_2
+tests/overlap_check_3
+tests/threadtest
