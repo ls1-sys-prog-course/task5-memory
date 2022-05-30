@@ -1,0 +1,54 @@
+{
+  "tests": [
+    {
+      "name": "Build",
+      "setup": "",
+      "run": "timeout -s KILL 2m make all",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": null
+    },
+    {
+      "name": "Basic functionalities",
+      "setup": "",
+      "run": "timeout -s KILL 2m python3 tests/basic_func.py",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 10
+    },
+    {
+      "name": "Reuse freed blocks",
+      "setup": "",
+      "run": "timeout -s KILL 2m python3 tests/reuse_freed.py",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 10
+    },
+    {
+      "name": "Coalescing",
+      "setup": "",
+      "run": "timeout -s KILL 2m python3 tests/merge_blocks.py",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 10
+    },
+    {
+      "name": "Multithreaded allocator",
+      "setup": "",
+      "run": "timeout -s KILL 2m python3 tests/threadtest.py",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 10
+    }
+  ]
+}
