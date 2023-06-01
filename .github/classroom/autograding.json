@@ -28,7 +28,7 @@
       "output": "",
       "comparison": "included",
       "timeout": 10,
-      "points": 10
+      "points": 5
     },
     {
       "name": "Coalescing",
@@ -38,7 +38,7 @@
       "output": "",
       "comparison": "included",
       "timeout": 10,
-      "points": 10
+      "points": 5
     },
     {
       "name": "Multithreaded allocator",
