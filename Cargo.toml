@@ -1,2 +1,10 @@
-[workspace]
-members = [ "mymalloc" ]
+[package]
+name = "mymalloc"
+version = "0.0.1"
+edition = "2021"
+
+[lib]
+crate_type = ["cdylib"]
+
+[dependencies]
+libc = "0.2.144"
