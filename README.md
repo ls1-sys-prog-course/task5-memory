@@ -66,4 +66,4 @@ in the respective paper: https://people.cs.umass.edu/~emery/pubs/berger-asplos20
 3. [Hoard: A Scalable Memory Allocator for Multithreaded Applications](https://people.cs.umass.edu/~emery/pubs/berger-asplos2000.pdf)
 4. [MemorySanitizer: fast detector of C uninitialized memory use in C++](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43308.pdf)
 5. [ThreadSanitizer – data race detection in practice](https://static.googleusercontent.com/media/research.google.com/el//pubs/archive/35604.pdf)
-6. [Memory Allocation for Long-Running Server Applications](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.45.1947&rep=rep1&type=pdf)
+6. [Memory Allocation for Long-Running Server Applications](https://citeseerx.ist.psu.edu/pdf/e41ad0406628edf82712d16cf4c6d7e486f26f9f)
